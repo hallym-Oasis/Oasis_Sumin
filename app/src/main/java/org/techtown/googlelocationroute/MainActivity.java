@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Log.d("mylog", "Added Markers");
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         map.moveCamera(CameraUpdateFactory.zoomTo(15));
-        map.addMarker(place1);
+        map.addMarker(place1.alpha(0.5f));
         map.addMarker(place2);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
