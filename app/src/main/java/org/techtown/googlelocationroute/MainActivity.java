@@ -1,15 +1,10 @@
 package org.techtown.googlelocationroute;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -25,17 +20,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
-import org.techtown.googlelocationroute.R;
-import org.techtown.googlelocationroute.directionhelpers.FetchURL;
-import org.techtown.googlelocationroute.directionhelpers.TaskLoadedCallback;
-
-
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     GoogleMap map;
-    Button btnGetDirection;
-
     MarkerOptions place1, place2;
     Polyline currentPolyline;
     LatLng latLng;
@@ -46,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        btnGetDirection = findViewById(R.id.btnGetDirection);
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFrag);
         mapFragment.getMapAsync(this);
 
@@ -55,9 +41,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         place1 = new MarkerOptions().position(latLng).title("Location 1");
         place2 = new MarkerOptions().position(new LatLng(37.8847835, 127.716588)).title("Location 2");
-
-        String url = getUrl(place1.getPosition(), place2.getPosition(), "driving");
-        new FetchURL(MainActivity.this).execute(url, "driving");
     }
 
     @Override
@@ -110,22 +93,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return;
             }
         }
-    }
-
-    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-        String mode = "mode=" + directionMode;
-        String parameters = str_origin + "&" + str_dest + "&" + mode;
-        String output = "json";
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
-        return url;
-    }
-
-    @Override
-    public void onTaskDone(Object... values) {
-        if (currentPolyline != null)
-            currentPolyline.remove();
-        currentPolyline = map.addPolyline((PolylineOptions) values[0]);
     }
 }
