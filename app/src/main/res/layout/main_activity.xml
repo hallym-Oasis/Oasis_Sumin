@@ -9,7 +9,6 @@
         android:id="@+id/mapFrag"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="496dp"
-        android:layout_weight="1" />
+        android:layout_height="400dp" />
 
 </LinearLayout>
